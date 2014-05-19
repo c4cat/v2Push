@@ -17,7 +17,8 @@ function date(){
 function Data(data) {
   this.id = data.id;
   this.time = data.time;
-};
+  this.log = data.log;
+}
 
 //存储用户信息
 Data.prototype.save = function(callback) {
@@ -25,7 +26,8 @@ Data.prototype.save = function(callback) {
   var data = {
       _id: '517',
       id: this.id,
-      time: this.time
+      time: this.time,
+      log: this.log
   };
   //打开数据库
   mongodb.open(function (err, db) {

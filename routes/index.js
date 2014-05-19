@@ -1,31 +1,25 @@
 /*
  * GET home page.
  */
-var User = require('../models/data.js');
+var dataJs = require('../models/data.js');
 
+function R_timestamp(nS) {     
+   return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');     
+}   
 
 module.exports = function(app) {
   app.get('/', function (req, res) {
-  res.render('index', { title: 'Express' });
-
-  var name = 'mrc';
-
-  var newUser = new User({
-      name: name,
-  });
-
-  //检查用户名是否已经存在 
-  // User.get(newUser.name, function (err, user) {
-    // if (user) {console.log('exists!');}
-    //如果不存在则新增用户
-    newUser.save(function (err, user) {
-      if (err) {
-      	console.log('err1');
-      }
-      req.session.user = user;//用户信息存入 session
-      console.log('done!');
+    var newData = new dataJs({
+      id : ' ',
+      time : ' '
     });
-  // });
-
+    newData.get('517',function(err,data){
+      res.render('index', { 
+        title: 'v2Push',
+        state: 'working...',
+        // log : ,
+        time: R_timestamp(data.time)
+      });
+    });
 });
 };
