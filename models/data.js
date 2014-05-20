@@ -1,5 +1,5 @@
 var mongodb = require('./db');
-
+console.log(mongodb);
 module.exports = Data;
 
 //日期

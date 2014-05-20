@@ -12,7 +12,7 @@ var request = require('request'),
     sendMail = require("./mail.js"),
     dataJs = require("./data.js");
 // global
-var keyword = ['外包','赠送','的活','wordpress','做页面','帮忙','切图','建站','有偿'],
+var keyword = ['外包','赠送','的活','wordpress','做页面','帮忙','切图','建站','有偿','网站'],
     json_host = 'http://www.v2ex.com/api/topics/latest.json',
     last_id = '', 
     count = 0,
@@ -78,22 +78,26 @@ function cb(err,msg){
 }
 // after download the json
 function handleData(err,res,data){
-    data = JSON.parse(data);// string to json
+    var d = JSON.parse(data);// string to json
     // object
     var newData = new dataJs({
-		id : data[0].id,
+		id : d[0].id,
 		time : timestamp()
 	});
     //save to db
     newData.save(cb);
-    format(data,data[0].id);
+    format(d);
 }
 //email format
 function format(json_data){
   var mail_format = '',
       k = 0, //count
-      loop = json_data[0].id - last_id; //loop time
+      loop = json_data[0].id - last_id, //loop time
       mail_format_footer = '<div style="BORDER-TOP:1PX SOLID #000;MARGIN-TOP:50PX;"><p style="text-align:left;line-height:2;color: #aaa;">' + date().d + ' , '+ date().h + ':' + date().m + ':' + date().s + '<\/p><\/div>';
+      if(loop > 20){
+        loop = 20;
+      }
+      console.log(loop);
 
    for(var i = 0; i < loop ;i++){
         for(var j = 0; j < keyword.length;j++){
@@ -125,7 +129,7 @@ function checkUpdate(k,mail_format){
     console.log('No data!');
     return false;
   }else{ 
-    sendMail.sendMail(mail_format);
+    // sendMail.sendMail(mail_format);
     console.log('send');
   }
 }
