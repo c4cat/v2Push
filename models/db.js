@@ -15,3 +15,7 @@ var dbServer = new mongodb.Server(process.env.OPENSHIFT_MONGODB_DB_HOST,parseInt
   	port    = parseInt(process.env.OPENSHIFT_NODEJS_PORT) || 8080;
 
 module.exports = db;
+
+
+
+
