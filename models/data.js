@@ -2,6 +2,9 @@ var mongodb = require('./db');
 console.log(mongodb);
 module.exports = Data;
 
+var dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME,
+    dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
+
 //日期
 function date(){
   var myDate = new date();
@@ -33,7 +36,9 @@ Data.prototype.save = function(callback) {
   mongodb.open(function (err, db) {
     if (err) {return callback(err);}//错误，返回 err 信息 
     //读取 data 集合
-    db.collection('data', function (err, collection) {
+    db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
+        if(err){ throw err };
+      db.collection('data', function (err, collection) {
       if (err) {mongodb.close(); return callback(err,'err');}//错误，返回 err 信息 }
       //将用户数据插入 users 集合
       collection.save(data, {safe: true}, function (err, data) {
@@ -42,6 +47,8 @@ Data.prototype.save = function(callback) {
           callback(null,'save');//成功！err 为 null，并返回存储后的用户文档
       });
     });
+      });
+
   });
 };
 
