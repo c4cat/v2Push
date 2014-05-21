@@ -101,8 +101,8 @@ function format(json_data){
 
    for(var i = 0; i < loop ;i++){
         for(var j = 0; j < keyword.length;j++){
-            // if(json_data[i].title.indexOf(keyword[j]) != -1 || json_data[i].node.id == '190' || json_data[i].node.id == '551'){
-              if(true){ //test
+            if(json_data[i].title.indexOf(keyword[j]) != -1 || json_data[i].node.id == '190' || json_data[i].node.id == '551'){
+              // if(true){ //test
                 k++; //count
                 save.push(json_data[i].id);
                 if(json_data[i].content == ''){
@@ -129,7 +129,7 @@ function checkUpdate(k,mail_format){
     console.log('No data!');
     return false;
   }else{ 
-    // sendMail.sendMail(mail_format);
+    sendMail.sendMail(mail_format);
     console.log('send');
   }
 }
