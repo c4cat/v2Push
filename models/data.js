@@ -2,10 +2,11 @@ var mongodb = require('./db');
 
 module.exports = Data;
 
+//auth for openshift
 var dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME,
     dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
 
-//日期
+//date
 function date(){
   var myDate = new date();
   var time= {
@@ -23,50 +24,49 @@ function Data(data) {
   this.log = data.log;
 }
 
-//存储用户信息
+//save data
 Data.prototype.save = function(callback) {
-  //要存入数据库的用户文档
+  //save doc
   var data = {
       _id: '517',
       id: this.id,
       time: this.time,
       log: this.log
   };
-  //打开数据库
+  //open db
   mongodb.open(function (err, db) {
-    if (err) {return callback(err);}//错误，返回 err 信息 
-    //读取 data 集合
+    if (err) {return callback(err);}
+    //auth
+    //4 openshift 
     db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
-        if(err){ throw err };
+      if(err){ throw err };
+      //read data
       db.collection('data', function (err, collection) {
-      if (err) {mongodb.close(); return callback(err,'err');}//错误，返回 err 信息 }
-      //将用户数据插入 users 集合
+      if (err) {mongodb.close(); return callback(err,'err');}
+      //insert
       collection.save(data, {safe: true}, function (err, data) {
           mongodb.close();
-          if (err) {return callback(err); }//错误，返回 err 信息
-          callback(null,'save');//成功！err 为 null，并返回存储后的用户文档
+          if (err) {return callback(err); }
+          callback(null,'save');
       });
     });
-      });
-
   });
+  }); //end auth
 };
 
-//读取用户信息
+//get data
 Data.prototype.get = function(id,callback) {
-  //打开数据库
   mongodb.open(function (err, db) {
-    if (err) {return callback(err);}//错误，返回 err 信息 
-    //读取 users 集合
+    if (err) {return callback(err);}
     db.collection('data', function (err, collection) {
-      if (err) {mongodb.close(); return callback(err);}//错误，返回 err 信息
-      //查找用户名（name键）值为 name 一个文档
+      if (err) {mongodb.close(); return callback(err);}
+      //find _id:517
       collection.findOne({
         _id: id
       }, function (err, data) {
         mongodb.close();
-        if (err) {return callback(err);}//失败！返回 err 信息
-        callback(null, data);//成功！返回查询的用户信息
+        if (err) {return callback(err);}
+        callback(null, data);
       });
     });
   });

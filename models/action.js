@@ -95,6 +95,8 @@ function format(json_data){
       loop = json_data[0].id - last_id; //loop time
       mail_format_footer = '<div style="BORDER-TOP:1PX SOLID #000;MARGIN-TOP:50PX;"><p style="text-align:left;line-height:2;color: #aaa;">' + date().d + ' , '+ date().h + ':' + date().m + ':' + date().s + '<\/p><\/div>';
 
+   if(loop>20){loop =20;} //loop over will throw err 
+
    for(var i = 0; i < loop ;i++){
         for(var j = 0; j < keyword.length;j++){
             // if(json_data[i].title.indexOf(keyword[j]) != -1 || json_data[i].node.id == '190' || json_data[i].node.id == '551'){

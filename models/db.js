@@ -3,8 +3,12 @@
 //     Connection = require('mongodb').Connection,
 //     Server = require('mongodb').Server;
 // module.exports = new Db(settings.db, new Server(settings.host, Connection.DEFAULT_PORT), {safe: true});
+//------------------------------------
+// ↑ use for localhost
 // ***********************************
 // -----------------------------------
+// ***********************************
+// ↓ use for openshift
 var mongodb = require('mongodb');
 
 var dbServer = new mongodb.Server(process.env.OPENSHIFT_MONGODB_DB_HOST,parseInt(process.env.OPENSHIFT_MONGODB_DB_PORT)),
