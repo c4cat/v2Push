@@ -36,7 +36,7 @@ function action(){
       //std = 1000 * 60;
   save = [];
 
-  if(date().h < 8){    
+  if(date().h < 20 && date().h > 11 ){    
     console.log('sleeping...');
   }else{
     getInfofromDB();
@@ -97,7 +97,7 @@ function format(json_data){
       if(loop > 20){
         loop = 20;
       }
-      console.log(loop);
+      //console.log(loop);
 
    for(var i = 0; i < loop ;i++){
         for(var j = 0; j < keyword.length;j++){
@@ -129,7 +129,7 @@ function checkUpdate(k,mail_format){
     console.log('No data!');
     return false;
   }else{ 
-    sendMail.sendMail(mail_format);
+    // sendMail.sendMail(mail_format);
     console.log('send');
   }
 }
