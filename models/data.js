@@ -1,5 +1,5 @@
 var mongodb = require('./db');
-
+console.log(mongodb);
 module.exports = Data;
 
 //auth for openshift
@@ -35,12 +35,19 @@ Data.prototype.save = function(callback) {
   };
   //open db
   mongodb.open(function (err, db) {
+<<<<<<< HEAD
     if (err) {return callback(err);}
     //auth
     //4 openshift 
     db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
       if(err){ throw err };
       //read data
+=======
+    if (err) {return callback(err);}//错误，返回 err 信息 
+    //读取 data 集合
+    // db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
+        if(err){ throw err };
+>>>>>>> 4642d521335e7a4d2db5c2b51c55dcc3adaa152a
       db.collection('data', function (err, collection) {
       if (err) {mongodb.close(); return callback(err,'err');}
       //insert
@@ -50,6 +57,11 @@ Data.prototype.save = function(callback) {
           callback(null,'save');
       });
     });
+<<<<<<< HEAD
+=======
+      // });
+
+>>>>>>> 4642d521335e7a4d2db5c2b51c55dcc3adaa152a
   });
   }); //end auth
 };

@@ -9,6 +9,7 @@ function R_timestamp(nS) {
 
 module.exports = function(app) {
   app.get('/', function (req, res) {
+
     var newData = new dataJs({
       id : ' ',
       time : ' '
