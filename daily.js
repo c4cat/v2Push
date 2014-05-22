@@ -22,7 +22,8 @@ var options_login = {
     	"Host": "v2ex.com",
     	"Origin": "http://v2ex.com",
     	"Referer": "http://www.v2ex.com/signin"
-	}
+	},
+	jar:true
 }    
 
 get_once_value();
