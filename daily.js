@@ -4,7 +4,7 @@
 //v2ex daily
 //nodejs
 
-var request = require('request'),
+var request = require('request').defaults({jar: true}),
     cheerio = require('cheerio'),
     http = require('http'),
     fs = require('fs');
@@ -22,14 +22,13 @@ var options_login = {
     	"Host": "v2ex.com",
     	"Origin": "http://v2ex.com",
     	"Referer": "http://www.v2ex.com/signin"
-	},
-	jar:true
+	}
 }    
 
 get_once_value();
 
 function get_once_value(){
-	console.log('test');
+	console.log('Working...Please wait...');
 	request(options_login,get_once_value_cb);
 }
 
@@ -38,8 +37,7 @@ function get_once_value_cb(err,res,body){
 		var $ = cheerio.load(body),
 			//the 3rd input tag
 		 	once = $('input').eq(3).attr('value');
-		 console.log($);
-		 console.log(once);
+		 // console.log(once);
 		 login(once);
 	}else{
 		 console.log(err);
@@ -80,15 +78,14 @@ function login(once){
 	request.post({
 		url : login_url,
 		headers :{"User-Agent": "UA","Host": "v2ex.com","Origin": "http://v2ex.com","Referer": "http://www.v2ex.com/signin"},
-		form : {next:"/",u:username,p:pwd,once:once,next:"/"},
-		jar : true
+		form : {'next':'/','u':username,'p':pwd,'once':once,'next':'/'}
 	},login_cb);
 }
 
 function login_cb(err,res,body){
 	if(!err){
-		console.log('post success');
-		console.log(res);
+		console.log('Login success!');
+		// console.log(res);
 		request(index_url,get_balance);
 	}else{
 		console.log(err);
@@ -98,7 +95,60 @@ function login_cb(err,res,body){
 function get_balance(err,res,body){
 	if(!err){
 		var $ = cheerio.load(body),
-			balance = $('.content').html();
-		console.log(balance);
+			money = $('#money').html(),
+			//reg
+			r = /\>.*?(?=\<img)/g,
+			rs = money.match(r),
+			//
+			balance ='';
+		for(var i=0;i<rs.length;i++){
+  	 		balance+=rs[i].slice(1).replace(/[ ]/g,"");
+		}
+		console.log('ur balance:'+ balance);
+		//get corn
+		request.get(daily_url,get_daily_once);
+
+	}else{
+		console.log(err);
+	}
+}
+
+function get_daily_once(err,res,body){
+	if(!err){
+		var $ = cheerio.load(body),
+			daily_onclick =  $('.super').attr('onclick'),
+			//reg
+			r = /\/.*?(?=')/g,
+			rs = daily_onclick.match(r)[0],
+			//reg
+			link = index_url + rs;
+			if(rs!=''){
+				request(link,log);
+			}else{
+				console.log('Maybe u have already get or some err happen!!');				
+			}
+
+	}else{
+		console.log(err);
+	}
+}
+
+function log(err,res,body){
+	if(!err){
+		var $ = cheerio.load(body),
+			money = $('#money').html(),
+			//reg
+			r = /\>.*?(?=\<img)/g,
+			rs = money.match(r),
+			//
+			balance ='';
+		for(var i=0;i<rs.length;i++){
+  	 		balance+=rs[i].slice(1).replace(/[ ]/g,"");
+		}
+		console.log('GET!!');
+		console.log('now ur balance:' + balance);
+
+	}else{
+		console.log(err);
 	}
 }
